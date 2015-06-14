@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tesseract</string>
+    <string name="drawer_open">Menu opened</string>
+    <string name="drawer_close">Menu closed</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps_activity2">Map</string>
+    <string name="toast1">item changed</string>
+    <string name="inline_preferences">General</string>
+    <string name="title_checkbox_preference">A</string>
+    <string name="dialog_based_preferences"></string>
+    <string name="title_edittext_preference"></string>
+    <string name="summary_edittext_preference"></string>
+    <string name="dialog_title_edittext_preference"></string>
+    <string name="title_list_preference"></string>
+    <string name="summary_list_preference"></string>
+    <string name="entryvalues_list_preference"></string>
+    <array name="entries_list_preference">
+        <item>Value1</item>
+        <item>Value1</item>
+    </array>
+    <array name="entryvalues_list_preference">
+        <item>Value</item>
+    </array>
+    <string name="dialog_title_list_preference"></string>
+
+
+
+
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
