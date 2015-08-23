@@ -20,6 +20,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import core.Entity.User;
+import core.UserCreator;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,9 +33,13 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class Setting extends PreferenceFragment{
-
+    private static UserCreator userCreator;
+    private User mUser;
+    public boolean changed=false;
     public Setting(){
 
+            userCreator = UserCreator.getInstance();
+            //mUser= userCreator.userFactory();
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,13 @@ public class Setting extends PreferenceFragment{
 
 
         
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+
+    //        userCreator.storeUser(mUser);
     }
 
 

@@ -5,5 +5,6 @@ package core.Entity.Interface;
  */
 public interface Position_Interface {
 
-
+    public double getLatitude();
+    public double getLongitude();
 }

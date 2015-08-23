@@ -1,15 +1,18 @@
 package core.Entity;
 
-import core.Entity.Interface.Vehicle_Interface;
+import java.util.LinkedList;
+
+import core.Entity.Interface.Car_Interface;
 
 /**
  * Created by francesco on 06/06/15.
  */
-public class Vehicle implements Vehicle_Interface {
+public class Car implements Car_Interface {
 
     private String registration_number;
+    private LinkedList <Route> routes;
 
-    public Vehicle(String registration_number){
+    public Car(String registration_number){
         this.registration_number=registration_number;
     }
 
@@ -20,5 +23,6 @@ public class Vehicle implements Vehicle_Interface {
     public String getRegistration_number(){
         return this.registration_number;
     }
+
 
 }

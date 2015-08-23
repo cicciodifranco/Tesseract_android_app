@@ -52,6 +52,8 @@ public class TesseractPositionManager extends Observable{
 
             }
         };
+
+
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
         current_position = locationManager.getLastKnownLocation(locationProvider);
@@ -80,10 +82,14 @@ public class TesseractPositionManager extends Observable{
         return current_status;
     }
 
+
     @Override
     public void addObserver(Observer observer) {
         super.addObserver(observer);
     }
+
+    @Override
+    public void deleteObserver(Observer observer){super.deleteObserver(observer);}
 
     @Override
     public void notifyObservers(Object data) {

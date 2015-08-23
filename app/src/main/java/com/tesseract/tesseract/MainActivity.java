@@ -4,6 +4,7 @@ import core.TesseractPositionManager.TesseractPositionManager;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tagmanager.Container;
 
+import java.util.List;
 
 
 public class MainActivity extends FragmentActivity implements NavigationDrawerCallbacks {
@@ -86,15 +89,21 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerCa
             switch (position) {
                 case 0:
                     if (mapFragment != null) {
-                        getSupportFragmentManager().beginTransaction().add(R.id.container, mapFragment).commit();
+                        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, 0, 0, 0);
+                        transaction.add(R.id.container, mapFragment).commit();
+
                         itemSelected = 0;
                     }
                     break;
-                case 2:
+                case 1:
                     getFragmentManager().beginTransaction().add(R.id.container, setting).commit();
                     itemSelected=1;
                     break;
-
+                case 2 :
+                    getFragmentManager().beginTransaction().add(R.id.container, setting).commit();
+                    itemSelected=1;
+                    break;
 
             }
         }

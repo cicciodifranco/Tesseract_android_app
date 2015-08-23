@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent" tools:context="com.tesseract.tesseract.LoginFragment">
+
+    <com.google.android.gms.common.SignInButton android:id="@+id/plus_sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+         />
+
+    <ImageButton android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
+        android:layout_width="match_parent" android:layout_height="45dp"
+        android:background="#3B5998"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:textStyle="bold"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:text="Sign in or register"
+        android:layout_height="50dp"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>
