@@ -37,7 +37,7 @@ public class UserCreator extends Observable{
     public User userFactory(){
         if(mUser==null){
             if(editor.isLogged()){
-                mUser= new User(editor.getEmail(), editor.getName(),
+                mUser= new User(editor.getId(),editor.getEmail(), editor.getName(),
                                 editor.getSurname(), editor.getBirthday(),
                                 editor.getGender(), editor.getFiscalCode());
             }
@@ -45,9 +45,19 @@ public class UserCreator extends Observable{
         return mUser;
 
     }
+    public User userFactory(int id, String email, String name, String surname, String birthday, String gender, String fiscalCode){
+        if(editor.isLogged()){
+            mUser=new User(id,email,name,surname,birthday,gender,fiscalCode);
+            storeUser(mUser);
+
+        }
+        return mUser;
+    }
+
 
     public boolean storeUser(User user){
         if(userComunicationManager.steUserInfo(user)){
+            editor.storeId(user.getId());
             editor.setEmail(user.getEmail());
             editor.setName(user.getName());
             editor.setSurname(user.getSurname());

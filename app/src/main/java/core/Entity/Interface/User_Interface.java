@@ -11,6 +11,8 @@ import core.Entity.Transaction;
  */
 public interface User_Interface {
 
+    public void setId(int id);
+    public int getId();
     public void setEmail(String email);
     public String getEmail();
 

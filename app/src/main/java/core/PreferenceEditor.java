@@ -18,6 +18,7 @@ class Preferences{
 
     public static final String FILE = "main_settings";
     public static final String LOGGED = "logged";
+    public static final String USER_ID="user_id";
     public static final String IDENTITY_PROVIDER = "identity_provider";
     public static final String TOKEN = "access_token";
     public static final String EMAIL = "email";
@@ -62,6 +63,7 @@ public class PreferenceEditor extends Observable {
         return preferences;
     }
 
+
     public void setLogged(boolean logged){
         editor = mSharedPreferences.edit();
         editor.putBoolean(Preferences.LOGGED, logged);
@@ -72,9 +74,20 @@ public class PreferenceEditor extends Observable {
         return mSharedPreferences.getBoolean(Preferences.LOGGED, false);
     }
 
+    public void storeId(int id){
+
+        editor=mSharedPreferences.edit();
+        editor.putInt(Preferences.USER_ID, id);
+        editor.commit();
+    }
+
+    public int getId(){
+        return mSharedPreferences.getInt(Preferences.USER_ID, 0);
+
+    }
     public void setIdentityProvider(String identityProvider){
         editor=mSharedPreferences.edit();
-         editor.putString(Preferences.IDENTITY_PROVIDER, identityProvider);
+        editor.putString(Preferences.IDENTITY_PROVIDER, identityProvider);
         editor.commit();
     }
 
