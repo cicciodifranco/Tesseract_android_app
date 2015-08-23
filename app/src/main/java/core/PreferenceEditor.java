@@ -27,7 +27,7 @@ class Preferences{
     public static final String BIRTHDAY = "birthday";
     public static final String GENDER = "gender";
     public static final String FISCAL_CODE = "fiscal_code";
-    public static final String CARS = "cars";
+    public static final String CAR = "car";
     public static final String ROUTES = "routes";
     public static final String TRANSACTIONS = "transactions";
 
@@ -159,14 +159,14 @@ public class PreferenceEditor extends Observable {
         return mSharedPreferences.getString(Preferences.FISCAL_CODE, null);
     }
 
-    public void setCars(String cars){
+    public void setCars(String car){
         editor=mSharedPreferences.edit();
-        editor.putString(Preferences.CARS, cars);
+        editor.putString(Preferences.CAR, car);
         editor.commit();
     }
 
     public String getCars(){
-        return mSharedPreferences.getString(Preferences.CARS, null);
+        return mSharedPreferences.getString(Preferences.CAR, null);
     }
 
     public void setRoutes(String routes){

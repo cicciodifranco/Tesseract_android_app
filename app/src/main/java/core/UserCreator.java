@@ -1,8 +1,11 @@
 package core;
 
+import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Observable;
 
 import core.ComunicationManager.HTTP.UserComunicationManager;
+import core.Entity.Interface.Route_Interface;
 import core.Entity.Interface.User_Interface;
 import core.Entity.Route;
 import core.Entity.Transaction;
@@ -13,18 +16,23 @@ import core.Entity.User;
  */
 
 
-public class UserCreator extends Observable{
+public class UserCreator extends Observable implements UserThread.UserThreadListner{
 
     private static User mUser;
     private static UserCreator instance;
     private static PreferenceEditor editor;
     private UserComunicationManager userComunicationManager;
     private User_Interface user;
+    private UserThread userThread ;
+    private Thread thread;
 
 
     private UserCreator(){
         editor = PreferenceEditor.getInstance();
         userComunicationManager  = UserComunicationManager.getInstance();
+        userThread = new UserThread(-1, this);
+        userThread.setUser(mUser);
+        thread = new Thread(userThread);
 
     }
 
@@ -37,7 +45,7 @@ public class UserCreator extends Observable{
     public User userFactory(){
         if(mUser==null){
             if(editor.isLogged()){
-                mUser= new User(editor.getId(),editor.getEmail(), editor.getName(),
+                mUser = new User(editor.getId(),editor.getEmail(), editor.getName(),
                                 editor.getSurname(), editor.getBirthday(),
                                 editor.getGender(), editor.getFiscalCode());
             }
@@ -46,41 +54,28 @@ public class UserCreator extends Observable{
 
     }
     public User userFactory(int id, String email, String name, String surname, String birthday, String gender, String fiscalCode){
-        if(editor.isLogged()){
-            mUser=new User(id,email,name,surname,birthday,gender,fiscalCode);
-            storeUser(mUser);
 
+        if(editor.isLogged()){
+            userThread.setAction(UserThread.STORE_USER);
+            mUser.setId(id);
+            mUser.setEmail(email);
+            mUser.setName(name);
+            mUser.setSurname(surname);
+            mUser.setBirthday(birthday);
+            mUser.setGender(gender);
+            mUser.setFiscalCode(fiscalCode);
+            thread.start();
         }
         return mUser;
     }
 
-
-    public boolean storeUser(User user){
-        if(userComunicationManager.steUserInfo(user)){
-            editor.storeId(user.getId());
-            editor.setEmail(user.getEmail());
-            editor.setName(user.getName());
-            editor.setSurname(user.getSurname());
-            editor.setBirthday(user.getBirthday());
-            editor.setGender(user.getGender());
-            editor.setFiscalCode(user.getFiscalCode());
-
-            setChanged();
-            notifyObservers();
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean storeRoute(Route route){
+    public void storeRoute(Route route){
         if(mUser!= null){
-            if(userComunicationManager.addRoute(route)){
-                //mUser.getCars().
-                return true;
-            }
+            userThread.setAction(UserThread.STORE_ROUTE);
+            mUser.addRoute(route);
+            thread.start();
         }
-        return false;
+
     }
 
     public boolean storeTransaction(Transaction transaction){
@@ -93,10 +88,31 @@ public class UserCreator extends Observable{
         return true;
     }
 
-    public boolean storeAccessToken(String accessToken){
-        return false;
+    public void storeAccessToken(String accessToken){
+        editor.setAccessToken(accessToken);
+
     }
 
+
+    @Override
+    public void OnActionFinished(boolean result, Object data, UserThread thread) {
+        if(result){
+            switch (thread.getActionSelected()){
+                case UserThread.GET_USER :
+                    if(data!=null)
+                        mUser = (User) data;
+                    break;
+                case UserThread.GET_ROUTE:
+                    if(data!=null)
+                        mUser.setRoutes((LinkedList<Route_Interface>)data);
+                    break;
+                default : return;
+            }
+            setChanged();
+            notifyObservers();
+
+        }
+    }
 
 
 }
