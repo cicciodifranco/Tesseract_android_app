@@ -23,6 +23,7 @@ public class UserThread implements Runnable {
     public static final int GET_CARS = 5;
     public static final int STORE_TRANSACTION = 6;
     public static final int GET_TRANSACTIONS = 7;
+
     private static UserCreator instance;
     private static PreferenceEditor editor;
     private UserComunicationManager userComunicationManager;

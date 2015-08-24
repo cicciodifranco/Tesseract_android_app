@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     tools:context="com.tesseract.tesseract.Splash_Screen"
     android:id="@+id/splash_screen"
-    android:background="@drawable/autostrada">
+    android:background="@drawable/autostrada_ponte">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -24,9 +24,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:gravity="bottom"
         android:id="@+id/container"
+        android:layout_marginBottom="15px"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"></RelativeLayout>
 </RelativeLayout>

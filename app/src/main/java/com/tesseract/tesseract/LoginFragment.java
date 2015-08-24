@@ -71,9 +71,12 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Go
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        ImageButton button = (ImageButton)view.findViewById(R.id.email_sign_in_button);
-        button.setOnClickListener(this);
-        button.setImageResource(R.drawable.facebook_login_button);
+        //ImageButton button = (ImageButton)view.findViewById(R.id.email_sign_in_button);
+        //button.setOnClickListener(this);
+        //button.setImageResource(R.drawable.image_selector);
+
+
+
         callbackManager = CallbackManager.Factory.create();
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -141,18 +144,18 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Go
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.plus_sign_in_button) {
+       /* if (v.getId() == R.id.plus_sign_in_button) {
             onSignInClicked();
             loginCallback.loginCompleted(true, Splash_Screen.GOOGLE);
 
         }
-        if(v.getId()==R.id.email_sign_in_button){
+        if(v.getId()==R.id.plus_sign_in_button){
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", "user_birthday", "user_location"));
             //Intent loginActivity= new Intent(getActivity(), Login_Activity.class);
             //startActivityForResult(loginActivity,LOGIN_REQUEST_CODE);
             //loginCallback.loginCompleted(true);
 
-        }
+        }*/
     }
 
     @Override

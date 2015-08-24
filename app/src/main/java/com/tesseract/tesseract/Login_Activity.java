@@ -59,9 +59,9 @@ public class Login_Activity extends FragmentActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.plus_sign_in_button) {
+        /*if (v.getId() == R.id.plus_sign_in_button) {
 
-        }
+        }*/
     }
 
 
