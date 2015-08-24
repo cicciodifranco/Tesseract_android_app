@@ -29,14 +29,15 @@ public class UserComunicationManager {
     public String getUserInfo(){
 
         HashMap parameters = new HashMap<String, String>();
-        parameters.put("email", editor.getEmail());
+        parameters.put("id", editor.getId());
         String response = httpManager.doGET(HTTP_Manager.GET_USER_INFO, parameters);
         if(response.equals("401"))
             return null;
         return response;
     }
-    public boolean steUserInfo(User user){
+    public boolean storeUserInfo(User user){
         HashMap parameters = new HashMap<String, String>();
+        parameters.put("id",""+user.getId());
         parameters.put("email", user.getEmail());
         parameters.put("name", user.getName());
         parameters.put("surname", user.getSurname());

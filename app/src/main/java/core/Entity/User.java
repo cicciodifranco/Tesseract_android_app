@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 
 import core.Entity.Interface.Car_Interface;
+import core.Entity.Interface.Route_Interface;
 import core.Entity.Interface.Transaction_Interface;
 import core.Entity.Interface.User_Interface;
 
@@ -13,8 +14,10 @@ import core.Entity.Interface.User_Interface;
 public class User implements User_Interface{
     private int id;
     private String email, name, surname, gender, birthday, fiscalCode;
+    private Car selectedCar;
     private LinkedList<Car_Interface> cars;
     private LinkedList<Transaction_Interface> transactions;
+    private LinkedList<Route_Interface> routes;
 
     public User(int id, String email, String name, String surname, String birthday, String gender, String fiscalCode){
         this.id=id;
@@ -93,6 +96,27 @@ public class User implements User_Interface{
     public String getFiscalCode(){
         return this.fiscalCode;
     }
+
+    public void setRoutes(LinkedList<Route_Interface> routes){
+        this.routes=routes;
+    }
+    public void addRoute(Route route){
+        if(this.routes==null)
+            routes=new LinkedList<Route_Interface>();
+        routes.add(route);
+    }
+    public LinkedList<Route_Interface> getRoutes(){
+        return this.routes;
+    }
+
+    public void setSelectedCar(Car car){
+        this.selectedCar=car;
+    }
+
+    public Car_Interface getSelectedCar(){
+        return this.selectedCar;
+    }
+
     @Override
     public void setCars(LinkedList<Car_Interface> cars){
         this.cars=cars;
