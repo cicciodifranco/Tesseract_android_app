@@ -71,9 +71,10 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Go
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        //ImageButton button = (ImageButton)view.findViewById(R.id.email_sign_in_button);
+        LoginButton button = (LoginButton)view.findViewById(R.id.facebook_login_button);
         //button.setOnClickListener(this);
-        //button.setImageResource(R.drawable.image_selector);
+        
+
 
 
 
