@@ -113,27 +113,29 @@ public class HTTP_Manager {
 
     public String doPOST(String URL, Map<String, String> parameters) {
         try {
-            targetUrl = new URL(URL);
-            connection = (HttpURLConnection) targetUrl.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("User-Agent", USER_AGENT);
             if (cookie == null) {
                 if (!fetchCookie()) {
                     throw new Exception("Unable to fetch cookie");
                 }
             }
+            targetUrl = new URL(URL);
+            connection = (HttpURLConnection) targetUrl.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("User-Agent", USER_AGENT);
+
             connection.setRequestProperty("Cookie", cookie.toString());
             String urlParameters = "";
             int i = 0;
             for (String key : parameters.keySet()) {
                 if (i == 0) {
-                    urlParameters += key + "=" + parameters.get(key);
+                    urlParameters += "?"+ key + "=" + parameters.get(key);
                 } else {
-                    urlParameters += "?" + key + "=" + parameters.get(key);
+                    urlParameters += "&" + key + "=" + parameters.get(key);
                 }
                 i++;
             }
             connection.setDoOutput(true);
+
             DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
             wr.writeBytes(urlParameters);
             wr.flush();

@@ -1,4 +1,4 @@
-package com.tesseract.tesseract;
+package com.tesseract.tesseract.Login;
 
 import android.os.Bundle;
 
@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-
+import com.tesseract.tesseract.R;
 
 
 public class Login_Activity extends FragmentActivity implements View.OnClickListener{

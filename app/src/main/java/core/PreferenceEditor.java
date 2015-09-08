@@ -2,13 +2,8 @@ package core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
-import com.tesseract.tesseract.ScrimInsetsFrameLayout;
-
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Observable;
 
 /**

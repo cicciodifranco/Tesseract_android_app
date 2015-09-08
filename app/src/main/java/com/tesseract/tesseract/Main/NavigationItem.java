@@ -1,4 +1,4 @@
-package com.tesseract.tesseract;
+package com.tesseract.tesseract.Main;
 
 import android.graphics.drawable.Drawable;
 

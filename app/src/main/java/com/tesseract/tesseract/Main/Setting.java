@@ -1,24 +1,14 @@
-package com.tesseract.tesseract;
+package com.tesseract.tesseract.Main;
 
-import android.app.Activity;
-import android.database.DataSetObserver;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.tesseract.tesseract.R;
 
 import core.Entity.User;
 import core.UserCreator;

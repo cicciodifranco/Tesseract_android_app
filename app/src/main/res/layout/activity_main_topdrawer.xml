@@ -24,7 +24,7 @@
             android:layout_height="match_parent"/>
     </LinearLayout>
     <!-- android:layout_marginTop="?android:attr/actionBarSize"-->
-    <com.tesseract.tesseract.ScrimInsetsFrameLayout
+    <com.tesseract.tesseract.Main.ScrimInsetsFrameLayout
         android:id="@+id/scrimInsetsFrameLayout"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="wrap_content"
@@ -37,10 +37,10 @@
 
         <fragment
             android:id="@+id/fragment_drawer"
-            android:name="com.tesseract.tesseract.NavigationDrawerFragment"
+            android:name="com.tesseract.tesseract.Main.NavigationDrawerFragment"
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:layout="@layout/fragment_navigation_drawer"/>
-    </com.tesseract.tesseract.ScrimInsetsFrameLayout>
+    </com.tesseract.tesseract.Main.ScrimInsetsFrameLayout>
 </android.support.v4.widget.DrawerLayout>

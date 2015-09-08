@@ -1,4 +1,4 @@
-package com.tesseract.tesseract;
+package com.tesseract.tesseract.Main;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,7 +9,7 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-
+import com.tesseract.tesseract.R;
 
 
 /**

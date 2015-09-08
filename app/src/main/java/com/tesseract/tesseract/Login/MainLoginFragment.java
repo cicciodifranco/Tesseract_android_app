@@ -1,18 +1,14 @@
-package com.tesseract.tesseract;
+package com.tesseract.tesseract.Login;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -22,41 +18,46 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.internal.CallbackManagerImpl;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
+import com.tesseract.tesseract.R;
 
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 
-public class LoginFragment extends android.support.v4.app.Fragment implements GoogleApiClient.ConnectionCallbacks,
+public class MainLoginFragment extends android.support.v4.app.Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener{
-    public static final String FACEBOOK = "facebook";
-    public static final String GOOGLE = "google";
-    public static final String TESSERACT = "tesseract";
 
-    private Fragment fragment;
-    private LoginButton facebookLoginButton;
+    public static final int LOGIN_REQUEST_CODE=1;
+    public static final int REGISTRATION_REQUEST_CODE=2;
+    private static final int RC_SIGN_IN = 0;
     private CallbackManager callbackManager;
     private String TAG = "Login Activity";
-    private static final int RC_SIGN_IN = 0;
     private GoogleApiClient mGoogleApiClient;
     private boolean mIsResolving = false;
     private boolean mShouldResolve = false;
     private LoginCallback loginCallback;
-    private final static int LOGIN_REQUEST_CODE=1;
+    private static List fbPermissions = Arrays.asList("public_profile", "email", "user_birthday");
+    private static MainLoginFragment instance;
 
-    public LoginFragment() {
+    public MainLoginFragment() {
 
+    }
+
+    public static MainLoginFragment getInstance(){
+        if(instance==null){
+            instance= new MainLoginFragment();
+        }
+        return instance;
     }
 
     @Override
@@ -70,15 +71,21 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Go
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-        LoginButton button = (LoginButton)view.findViewById(R.id.facebook_login_button);
-        //button.setOnClickListener(this);
-        
+        View view = inflater.inflate(R.layout.fragment_main_login, container, false);
 
+        Button facebookButton = (Button)view.findViewById(R.id.facebook_login_button);
+        Button googleButton = (Button) view.findViewById(R.id.google_login_button);
+        Button loginButton = (Button) view.findViewById(R.id.tesseract_login_button);
+        Button registerButton = (Button) view.findViewById(R.id.tesseract_register_button);
 
+        //setting button listener
+        facebookButton.setOnClickListener(this);
+        googleButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
+        registerButton.setOnClickListener(this);
 
+        //facebook callback manager init
 
-        callbackManager = CallbackManager.Factory.create();
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -87,25 +94,7 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Go
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
 
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
 
-                fetchFbInfo(loginResult.getAccessToken());
-                Toast.makeText(getActivity().getApplicationContext(), "Login effetuato", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onCancel() {
-                Toast.makeText(getActivity().getApplicationContext(), "Login cancellato", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-            }
-        });
         return view;
     }
 
@@ -121,7 +110,23 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Go
                     + " must implement OnFragmentInteractionListener");
         }
         FacebookSdk.sdkInitialize(activity.getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                fetchFbInfo(loginResult.getAccessToken());
+            }
 
+            @Override
+            public void onCancel() {
+                Toast.makeText(getActivity().getApplicationContext(), "Login cancellato", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.facebook_login_cancelled), Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 
@@ -145,18 +150,34 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Go
 
     @Override
     public void onClick(View v) {
-       /* if (v.getId() == R.id.plus_sign_in_button) {
-            onSignInClicked();
-            loginCallback.loginCompleted(true, Splash_Screen.GOOGLE);
+
+        switch(v.getId()){
+
+            case R.id.facebook_login_button : {
+                //facebook login activity
+                LoginManager.getInstance().logInWithReadPermissions(this, fbPermissions);
+                break;
+            }
+            case R.id.google_login_button : {
+                //google login dialog
+                onSignInClicked();
+                break;
+
+            }
+            case R.id.tesseract_register_button : {
+                loginCallback.sigUpPressed();
+                break;
+            }
+
+            case R.id.tesseract_login_button : {
+                loginCallback.logInPressed();
+                break;
+            }
+
+            default : break;
 
         }
-        if(v.getId()==R.id.plus_sign_in_button){
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", "user_birthday", "user_location"));
-            //Intent loginActivity= new Intent(getActivity(), Login_Activity.class);
-            //startActivityForResult(loginActivity,LOGIN_REQUEST_CODE);
-            //loginCallback.loginCompleted(true);
 
-        }*/
     }
 
     @Override
@@ -185,26 +206,10 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Go
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "On Activity Result");
-        if(requestCode==LOGIN_REQUEST_CODE){
-            if(resultCode==0)
-                loginCallback.loginCompleted(true, Splash_Screen.TESSERACT);
-
-        }
-
-
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
     }
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     private void onSignInClicked() {
         // User clicked the sign-in button, so begin the sign-in process and automatically
         // attempt to resolve any errors that occur.
@@ -220,30 +225,37 @@ public class LoginFragment extends android.support.v4.app.Fragment implements Go
         GraphRequest request = GraphRequest.newMeRequest(accessToken,new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
+                        if(response.getError()==null)
+                            if(object!=null) {
+                                Iterator iterator = object.keys();
+                                if (iterator != null)
+                                    while (iterator.hasNext()) {
+                                        try {
+                                            String key = (String) iterator.next();
+                                            String value = object.get(key).toString();
+                                            Log.i(TAG, "\"" + key + "\":" + "\"" + value + "\"");
+                                        } catch (Exception e) {
 
-                        Iterator iterator = object.keys();
-                        while(iterator.hasNext()){
-                            try {
-                                String key = (String) iterator.next();
-                                String value = object.get(key).toString();
-                                Log.i(TAG,"\""+key+"\":"+"\""+value+"\"");
+                                        }
+                                    }
+                                return;
                             }
-                            catch (Exception e){
-
-                            }
-                        }
-
+                        Toast.makeText(getActivity().getApplicationContext(), "Facebook response error", Toast.LENGTH_LONG).show();
+                        Log.i(TAG,response.getError().toString());
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id, name, email");
+        parameters.putString("fields", "id, first_name, middle_name, last_name, gender, birthday, locale, email");
         request.setParameters(parameters);
         request.executeAsync();
     }
 
     public interface LoginCallback{
 
-        public void loginCompleted(boolean result, String provider);
+        void loginCompleted(boolean result, String provider);
+        void sigUpPressed();
+        void logInPressed();
+        void cancelPressed();
     }
 
 }

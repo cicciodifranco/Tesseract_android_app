@@ -1,4 +1,4 @@
-package com.tesseract.tesseract;
+package com.tesseract.tesseract.Main;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;

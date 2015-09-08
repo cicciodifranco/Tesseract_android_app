@@ -1,33 +1,48 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tesseract.tesseract.Splash_Screen"
+    tools:context="com.tesseract.tesseract.Login.Splash_Screen"
     android:id="@+id/splash_screen"
-    android:background="@drawable/autostrada_ponte">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/logoView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_below="@+id/logoView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="87dp" />
-
-    <RelativeLayout
+    android:background="@drawable/autostrada">
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:gravity="bottom"
-        android:id="@+id/container"
-        android:layout_marginBottom="15px"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"></RelativeLayout>
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/main_container">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/logoView"
+                android:background="@drawable/logo"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp" />
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:layout_below="@+id/logoView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:gravity="bottom"
+                android:id="@+id/splash_screen_container"
+                android:layout_marginTop="80dp"
+                android:layout_below="@+id/progressBar"
+                android:layout_alignParentStart="true">
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

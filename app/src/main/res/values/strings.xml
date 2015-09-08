@@ -33,9 +33,7 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
-
+    <string name="facebook_login_cancelled">Facebook login error</string>
 
 
 </resources>

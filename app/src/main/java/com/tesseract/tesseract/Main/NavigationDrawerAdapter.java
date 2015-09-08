@@ -1,4 +1,4 @@
-package com.tesseract.tesseract;
+package com.tesseract.tesseract.Main;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.tesseract.tesseract.R;
 
 import java.util.List;
 

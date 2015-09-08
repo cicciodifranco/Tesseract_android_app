@@ -1,4 +1,4 @@
-package com.tesseract.tesseract;
+package com.tesseract.tesseract.Main;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.tesseract.tesseract.R;
 
 
 /**

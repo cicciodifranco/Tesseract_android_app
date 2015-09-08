@@ -1,43 +1,67 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent" tools:context="com.tesseract.tesseract.LoginFragment">
+    android:layout_height="match_parent"
+    android:tag="login_fragment"
+    tools:context="com.tesseract.tesseract.Login.Login_Fragment"
+    android:orientation="vertical">
 
 
-    <com.facebook.login.widget.LoginButton
-        android:layout_width="300dp"
-        android:layout_height="46dp"
-        android:id="@+id/facebook_login_button"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"/>
-    <ImageButton
-        android:layout_width="300dp"
-        android:text="Sign in or register"
-        android:layout_height="46dp"
-        android:id="@+id/button"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_centerHorizontal="true" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/email_field"
+        android:background="#FFFFFF"
+        android:alpha="0.9"
+        android:textColor="@color/button_material_dark"
+        android:layout_gravity="center_horizontal"
+        android:text="Email" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:background="@color/button_material_dark" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="textPassword"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:ems="10"
+        android:background="#FFFFFF"
+        android:alpha="0.9"
+        android:textColor="@color/button_material_dark"
+        android:id="@+id/password_field"
+        android:layout_gravity="center_horizontal"
+        android:text="Password" />
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linearLayout"
         android:layout_gravity="center_horizontal">
 
-        <ImageButton
+
+        <Button
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:id="@+id/tesseract_register_button"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/cancel_login_button"
             android:layout_weight="0.5"/>
 
-        <ImageButton
+        <Button
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:id="@+id/tesseract_login_button"
-            android:layout_weight="0.5"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Log In"
+            android:id="@+id/confirm_login_button"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 
 
