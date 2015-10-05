@@ -1,4 +1,4 @@
-package core.ComunicationManager.WebSocket;
+package core.CommunicationManager.WebSocket;
 
 /**
  * Created by kakashi on 8/3/15.
@@ -7,7 +7,6 @@ package core.ComunicationManager.WebSocket;
 import android.util.Log;
 
 import com.pubnub.api.*;
-import org.json.*;
 
 import java.util.Observable;
 

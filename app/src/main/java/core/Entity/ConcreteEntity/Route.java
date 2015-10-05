@@ -1,6 +1,5 @@
-package core.Entity;
+package core.Entity.ConcreteEntity;
 import core.Entity.Interface.Car_Interface;
-import core.Entity.Interface.Position_Interface;
 import core.Entity.Interface.Route_Interface;
 import core.Entity.Interface.Toolboth_Interface;
 import core.Entity.Interface.Transaction_Interface;
@@ -17,8 +16,13 @@ public class Route implements Route_Interface{
     private Toolboth starting_toolboth, final_toolboth;
     private Car car;
     private float price;
+    private String date;
+
     int index=0;
 
+    public Route (){
+        this(0, null, null);
+    }
     public Route(int id, Toolboth start_toolboth, Car car){
 
         this(id, start_toolboth.getLatitude(), start_toolboth.getLongitude(), car);
@@ -44,6 +48,12 @@ public class Route implements Route_Interface{
     }
     public Route (int id, double initLat, double initLon, double finalLat,double finalLon, Car car, float price){
 
+
+        this(id, initLat, initLon, finalLat, finalLon, car, price, "");
+    }
+
+    public Route (int id, double initLat, double initLon, double finalLat,double finalLon, Car car, float price, String date){
+
         this.id=id;
         this.starting_position= new Position(initLat, initLon);
         this.final_position=new Position(finalLat, finalLon);
@@ -51,6 +61,8 @@ public class Route implements Route_Interface{
         this.price=price;
         this.car=car;
     }
+
+
 
     @Override
     public void setId(int id){
@@ -148,4 +160,14 @@ public class Route implements Route_Interface{
         return null;
     }
 
+    @Override
+    public void setDate(String date){
+
+        this.date=date;
+    }
+
+    @Override
+    public String getDate(){
+        return this.date;
+    }
 }

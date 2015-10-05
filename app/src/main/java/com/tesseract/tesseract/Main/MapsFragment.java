@@ -1,31 +1,27 @@
 package com.tesseract.tesseract.Main;
 
-import android.app.Fragment;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.Observable;
-import java.util.Observer;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MapsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MapsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MapsFragment extends SupportMapFragment implements Observer{
+public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Mediator mediator = Mediator.getInstance();
 
     public MapsFragment(){
         super();
-        mMap=super.getMap();
-
+        this.mMap=super.getMap();
+        if(mMap==null)
+            getMapAsync(this);
+        mediator.setMapsFragment(this);
     }
 
 
@@ -36,11 +32,30 @@ public class MapsFragment extends SupportMapFragment implements Observer{
 
 
     @Override
-    public void update(Observable observable, Object data) {
-        moveCamera((LatLng)data);
+    public void onMapReady(GoogleMap googleMap){
+        mediator.onMapReady();
     }
 
     public void moveCamera(LatLng position){
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        if(mMap!=null)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 16f));
+    }
+
+
+    public Marker setMarker(LatLng location, int resource){
+        Marker marker=null;
+
+        if(mMap!=null){
+            if(resource!=0)
+                marker = mMap.addMarker(new MarkerOptions()
+                    .position(location)
+                    .draggable(false)
+                    .icon(BitmapDescriptorFactory.fromResource(resource)));
+            else
+                marker = mMap.addMarker(new MarkerOptions()
+                        .position(location)
+                        .draggable(false));
+        }
+        return marker;
     }
 }

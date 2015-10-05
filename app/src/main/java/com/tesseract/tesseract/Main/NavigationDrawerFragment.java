@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,21 +24,26 @@ import com.tesseract.tesseract.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.Entity.ConcreteEntity.Car;
+import core.PreferenceEditor;
+import core.UserCreator;
+
 /**
  * Created by poliveira on 24/10/2014.
  */
 public class NavigationDrawerFragment extends Fragment implements NavigationDrawerCallbacks {
-    private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
+
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-    private static final String PREFERENCES_FILE = "my_app_settings"; //TODO: change this to your file
+    private static final String PREFERENCES_FILE = "main_settings";
     private NavigationDrawerCallbacks mCallbacks;
     private RecyclerView mDrawerList;
     private View mFragmentContainerView;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
-    private boolean mUserLearnedDrawer;
+
     private boolean mFromSavedInstanceState;
     private int mCurrentSelectedPosition;
+    private String TAG = "NavDrawer";
 
 
     @Nullable
@@ -50,19 +56,26 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerList.setLayoutManager(layoutManager);
         mDrawerList.setHasFixedSize(true);
         TextView name = (TextView) view.findViewById(R.id.txtUsername);
-        name.setText("ciccio");
+        TextView car = (TextView) view.findViewById(R.id.txtUserEmail);
+
+        name.setText(UserCreator.getInstance().userFactory().getName());
+        Car selected_car;
+        if((selected_car = (Car)UserCreator.getInstance().userFactory().getSelectedCar())!=null)
+            car.setText(selected_car.getRegistration_number());
+        else
+            car .setText("");
+
         final List<NavigationItem> navigationItems = getMenu();
         NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(navigationItems);
         adapter.setNavigationDrawerCallbacks(this);
         mDrawerList.setAdapter(adapter);
-        selectItem(mCurrentSelectedPosition);
+        //selectItem(mCurrentSelectedPosition);
         return view;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserLearnedDrawer = Boolean.valueOf(readSharedSetting(getActivity(), PREF_USER_LEARNED_DRAWER, "false"));
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
@@ -108,17 +121,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 if (!isAdded()) return;
-                if (!mUserLearnedDrawer) {
-                    mUserLearnedDrawer = true;
-                    saveSharedSetting(getActivity(), PREF_USER_LEARNED_DRAWER, "true");
-                }
+
 
                 getActivity().invalidateOptionsMenu();
             }
         };
 
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState)
-            mDrawerLayout.openDrawer(mFragmentContainerView);
 
         mDrawerLayout.post(new Runnable() {
             @Override

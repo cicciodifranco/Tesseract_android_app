@@ -10,23 +10,23 @@ import android.widget.Toast;
 
 import com.tesseract.tesseract.R;
 
-import core.Entity.User;
+import core.Entity.ConcreteEntity.User;
 import core.UserCreator;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Setting.OnFragmentInteractionListener} interface
+ * {@link SettingFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Setting#newInstance} factory method to
+ * Use the {@link SettingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Setting extends PreferenceFragment{
+public class SettingFragment extends PreferenceFragment{
     private static UserCreator userCreator;
     private User mUser;
     public boolean changed=false;
-    public Setting(){
+    public SettingFragment(){
 
             userCreator = UserCreator.getInstance();
             //mUser= userCreator.userFactory();

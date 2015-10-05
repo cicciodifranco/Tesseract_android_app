@@ -1,10 +1,8 @@
 package core.Entity.Interface;
 
 import java.util.LinkedList;
-import java.util.List;
 
-import core.Entity.Car;
-import core.Entity.Transaction;
+import core.Entity.ConcreteEntity.Car;
 
 /**
  * Created by francesco on 06/06/15.
@@ -16,6 +14,8 @@ public interface User_Interface {
     public void setEmail(String email);
     public String getEmail();
 
+    public String getPassword();
+    public void setPassword(String password);
     public void setName(String name);
     public String getName();
 

@@ -1,4 +1,4 @@
-package core.Entity;
+package core.Entity.ConcreteEntity;
 
 import java.util.LinkedList;
 

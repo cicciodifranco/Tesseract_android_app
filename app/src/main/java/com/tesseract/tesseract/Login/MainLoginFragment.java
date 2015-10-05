@@ -32,10 +32,15 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import core.PreferenceEditor;
+import core.UserCreator;
+import core.UserCreator.CreatorListener;
+
 
 public class MainLoginFragment extends android.support.v4.app.Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener{
+        View.OnClickListener,
+        CreatorListener{
 
     public static final int LOGIN_REQUEST_CODE=1;
     public static final int REGISTRATION_REQUEST_CODE=2;
@@ -48,7 +53,7 @@ public class MainLoginFragment extends android.support.v4.app.Fragment implement
     private LoginCallback loginCallback;
     private static List fbPermissions = Arrays.asList("public_profile", "email", "user_birthday");
     private static MainLoginFragment instance;
-
+    private UserCreator userCreator = UserCreator.getInstance();
     public MainLoginFragment() {
 
     }
@@ -77,6 +82,7 @@ public class MainLoginFragment extends android.support.v4.app.Fragment implement
         Button googleButton = (Button) view.findViewById(R.id.google_login_button);
         Button loginButton = (Button) view.findViewById(R.id.tesseract_login_button);
         Button registerButton = (Button) view.findViewById(R.id.tesseract_register_button);
+        userCreator.setCreatorListener(this);
 
         //setting button listener
         facebookButton.setOnClickListener(this);
@@ -221,27 +227,47 @@ public class MainLoginFragment extends android.support.v4.app.Fragment implement
         Log.i(TAG, "login ok");
     }
 
-    public void fetchFbInfo(AccessToken accessToken){
+    /*
+"id":"10205769986521041"
+"first_name":"Ciccio"
+"middle_name":"Di"
+"last_name":"Franco"
+gender":"male"
+"birthday":"01/03/1990"
+"locale":"it_IT"
+"email":"cicciodifranco@hotmail.it"
+*/
+
+    public void fetchFbInfo(final AccessToken accessToken){
+        UserCreator creator = UserCreator.getInstance();
+        String fbAccessToken=""+accessToken.getToken();
+        creator.storeAccessToken(fbAccessToken);
+        creator.setCreatorListener(this);
+        Log.i(TAG, fbAccessToken);
         GraphRequest request = GraphRequest.newMeRequest(accessToken,new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         if(response.getError()==null)
                             if(object!=null) {
-                                Iterator iterator = object.keys();
-                                if (iterator != null)
-                                    while (iterator.hasNext()) {
-                                        try {
-                                            String key = (String) iterator.next();
-                                            String value = object.get(key).toString();
-                                            Log.i(TAG, "\"" + key + "\":" + "\"" + value + "\"");
-                                        } catch (Exception e) {
+                                try {
 
-                                        }
+                                    int id= object.getInt("id");
+                                    String name = object.getString("first_name"),
+                                           surname = object.getString("last_name"),
+                                           gender= object.getString("gender"),
+                                           birthday= object.getString("birthday"),
+                                           locale= object.getString("locale");
+                                    UserCreator.userFactory(id, "null", name, surname, birthday, gender, "null");
+
+
+
+                                    return;
+                                    } catch (Exception e) {
+                                        Log.e(TAG, e.toString());
                                     }
-                                return;
                             }
                         Toast.makeText(getActivity().getApplicationContext(), "Facebook response error", Toast.LENGTH_LONG).show();
-                        Log.i(TAG,response.getError().toString());
+
                     }
                 });
         Bundle parameters = new Bundle();
@@ -250,9 +276,24 @@ public class MainLoginFragment extends android.support.v4.app.Fragment implement
         request.executeAsync();
     }
 
+    @Override
+    public void OnActionsFinished(int action, boolean result) {
+        if(result) {
+
+            ((Splash_Screen) getActivity()).loginCompleted(true, Splash_Screen.FACEBOOK);
+            PreferenceEditor.getInstance().setLogged(true);
+        }
+    }
+
+    @Override
+    public void update() {
+
+    }
+
     public interface LoginCallback{
 
         void loginCompleted(boolean result, String provider);
+        void loginInProgress();
         void sigUpPressed();
         void logInPressed();
         void cancelPressed();

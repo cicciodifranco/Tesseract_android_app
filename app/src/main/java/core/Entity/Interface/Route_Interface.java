@@ -1,8 +1,5 @@
 package core.Entity.Interface;
 
-import core.Entity.Toolboth;
-import core.PreferenceEditor;
-
 /**
  * Created by francesco on 06/06/15.
  */
@@ -21,6 +18,10 @@ public interface Route_Interface {
     public Toolboth_Interface getFinalToolboth();
 
     public void setStartingPosition(double latitude, double longitude);
+
+    public void setDate(String date);
+
+    public String getDate();
 
     public Position_Interface getStartingPosition();
 

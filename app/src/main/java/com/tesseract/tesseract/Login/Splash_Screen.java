@@ -1,8 +1,5 @@
 package com.tesseract.tesseract.Login;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -12,13 +9,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.facebook.login.LoginFragment;
 import com.tesseract.tesseract.Main.MainActivity;
 import com.tesseract.tesseract.R;
 
-import core.ComunicationManager.WebSocket.PubNub;
+import core.CommunicationManager.WebSocket.PubNub;
 import core.PreferenceEditor;
 
 
@@ -26,7 +21,7 @@ public class Splash_Screen extends ActionBarActivity implements MainLoginFragmen
     public static final String FACEBOOK = "facebook";
     public static final String GOOGLE = "google";
     public static final String TESSERACT = "tesseract";
-
+    private static final String TAG ="Splash screen";
 
     private static final String ACTIVE_FRAGMENT="active_fragment";
     private static final int MAIN_LOGIN = 0;
@@ -141,20 +136,47 @@ public class Splash_Screen extends ActionBarActivity implements MainLoginFragmen
 
     @Override
     public void loginCompleted(boolean result, String provider) {
+        progressBar.setVisibility(View.INVISIBLE);
         if(result) {
-            getSupportFragmentManager().beginTransaction().remove(mainLoginFragment).commit();
+            //getSupportFragmentManager().beginTransaction().remove(mainLoginFragment).commit();
             if(provider.equals(FACEBOOK)) {
-
+                Log.i(TAG, "login completed");
+                PreferenceEditor.getInstance().setIdentityProvider(FACEBOOK);
+            }
+            if(provider.equals(TESSERACT)){
+                PreferenceEditor.getInstance().setIdentityProvider(TESSERACT);
             }
             Intent mainActivity = new Intent(this, MainActivity.class);
             startActivity(mainActivity);
             finish();
         }
     }
+    @Override
+    public void onBackPressed(){
+        if(activeFragment!=MAIN_LOGIN)
+            cancelPressed();
+        else super.onBackPressed();
+
+    }
+
+    @Override
+    public void loginInProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void sigUpPressed() {
+        if(mainLoginFragment==null)
+            mainLoginFragment = (MainLoginFragment)getSupportFragmentManager().findFragmentByTag("fragment_main_login");
 
+        getSupportFragmentManager().beginTransaction().remove(mainLoginFragment).commit();
+        android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.animator.enter, 0, 0, 0);
+
+        SignUpFragment signUpFragment = SignUpFragment.newInstance();
+        getFragmentManager().beginTransaction().add(R.id.splash_screen_container, signUpFragment).commit();
+        selectedFragment=signUpFragment;
+        activeFragment=REGISTER;
     }
 
     @Override

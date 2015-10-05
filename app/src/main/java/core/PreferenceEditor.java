@@ -2,9 +2,12 @@ package core;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.Preference;
+import android.util.Log;
 
 import java.util.Map;
 import java.util.Observable;
+import java.util.Set;
 
 /**
  * Created by kakashi on 04/07/15.
@@ -17,6 +20,7 @@ class Preferences{
     public static final String IDENTITY_PROVIDER = "identity_provider";
     public static final String TOKEN = "access_token";
     public static final String EMAIL = "email";
+    public static final String PASSWORD = "password";
     public static final String NAME = "name";
     public static final String SURNAME = "surname";
     public static final String BIRTHDAY = "birthday";
@@ -25,28 +29,27 @@ class Preferences{
     public static final String CAR = "car";
     public static final String ROUTES = "routes";
     public static final String TRANSACTIONS = "transactions";
-
+    public static final String ROUTE_INCOMPLETE = "route_incomplete";
 }
 
 public class PreferenceEditor extends Observable {
 
+    private String TAG="Preference editor";
     private Map <String, ?> preferences;
     private static PreferenceEditor instance;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor editor;
+    private String accessToken="";
 
     private PreferenceEditor(Context context){
 
         mSharedPreferences = context.getSharedPreferences(Preferences.FILE, context.MODE_PRIVATE);
         preferences = mSharedPreferences.getAll();
 
-
     }
     public static void init(Context context){
 
             instance = new PreferenceEditor(context);
-
-
     }
 
     public static PreferenceEditor getInstance(){
@@ -86,14 +89,33 @@ public class PreferenceEditor extends Observable {
         editor.commit();
     }
 
+    public void storePassword(String password){
+        editor=mSharedPreferences.edit();
+        editor.putString(Preferences.PASSWORD, password);
+        editor.commit();
+    }
+
+    public String getPassword(){
+        return  mSharedPreferences.getString(Preferences.PASSWORD, "");
+    }
+
     public String getIdentityProvider(){
         return mSharedPreferences.getString(Preferences.IDENTITY_PROVIDER, null);
     }
 
     public void setAccessToken(String accessToken){
+        this.accessToken=accessToken;
+        Log.i(TAG , accessToken);
         editor=mSharedPreferences.edit();
         editor.putString(Preferences.TOKEN, accessToken);
         editor.commit();
+    }
+
+    public String getAccessToken(){
+        if(this.accessToken.equals(""))
+            this.accessToken=mSharedPreferences.getString(Preferences.TOKEN, "");
+        Log.i(TAG, accessToken);
+        return this.accessToken;
     }
 
     public void setEmail(String email){
@@ -155,13 +177,19 @@ public class PreferenceEditor extends Observable {
     }
 
     public void setCars(String car){
-        editor=mSharedPreferences.edit();
-        editor.putString(Preferences.CAR, car);
-        editor.commit();
+        Set<String> cars = mSharedPreferences.getStringSet(Preferences.CAR, null);
+
+        if(cars!=null && !cars.contains(car)) {
+            cars.add(car);
+            editor = mSharedPreferences.edit();
+            editor.putStringSet(Preferences.CAR, cars);
+            editor.commit();
+        }
+
     }
 
-    public String getCars(){
-        return mSharedPreferences.getString(Preferences.CAR, null);
+    public Set <String> getCars(){
+        return mSharedPreferences.getStringSet(Preferences.CAR, null);
     }
 
     public void setRoutes(String routes){
@@ -182,7 +210,16 @@ public class PreferenceEditor extends Observable {
         return mSharedPreferences.getString(Preferences.TRANSACTIONS, null);
     }
 
+    public boolean getRouteState(){
+        return mSharedPreferences.getBoolean(Preferences.ROUTE_INCOMPLETE, false);
 
+    }
+
+    public void setRouteState(boolean state){
+        editor = mSharedPreferences.edit();
+        editor.putBoolean(Preferences.ROUTE_INCOMPLETE, state);
+        editor.commit();
+    }
 }
 
 

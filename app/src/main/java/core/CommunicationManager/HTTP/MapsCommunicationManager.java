@@ -1,4 +1,4 @@
-package core.ComunicationManager.HTTP;
+package core.CommunicationManager.HTTP;
 
 import java.util.HashMap;
 
@@ -7,19 +7,19 @@ import core.Entity.Interface.Position_Interface;
 /**
  * Created by kakashi on 04/07/15.
  */
-public class MapsComunicationManager {
+public class MapsCommunicationManager {
 
     private HTTP_Manager http_manager;
-    private static MapsComunicationManager instance;
+    private static MapsCommunicationManager instance;
 
-    private MapsComunicationManager(){
+    private MapsCommunicationManager(){
 
         http_manager= HTTP_Manager.getInstance();
     }
 
-    public static MapsComunicationManager getInstance(){
+    public static MapsCommunicationManager getInstance(){
         if(instance== null)
-            instance= new MapsComunicationManager();
+            instance= new MapsCommunicationManager();
         return instance;
     }
 

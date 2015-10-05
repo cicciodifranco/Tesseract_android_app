@@ -1,4 +1,4 @@
-package core.Entity;
+package core.Entity.ConcreteEntity;
 
 import java.util.LinkedList;
 
@@ -18,6 +18,7 @@ public class User implements User_Interface{
     private LinkedList<Car_Interface> cars;
     private LinkedList<Transaction_Interface> transactions;
     private LinkedList<Route_Interface> routes;
+    private String password;
 
     public User(int id, String email, String name, String surname, String birthday, String gender, String fiscalCode){
         this.id=id;
@@ -48,6 +49,17 @@ public class User implements User_Interface{
     public String getEmail(){
         return this.email;
     }
+
+    @Override
+    public String getPassword() {
+        return  this.password;
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password=password;
+    }
+
     @Override
     public void setName(String name){
         this.name=name;
@@ -103,7 +115,7 @@ public class User implements User_Interface{
     public void addRoute(Route route){
         if(this.routes==null)
             routes=new LinkedList<Route_Interface>();
-        routes.add(route);
+        routes.addLast(route);
     }
     public LinkedList<Route_Interface> getRoutes(){
         return this.routes;
@@ -131,7 +143,7 @@ public class User implements User_Interface{
     public void addCar(Car car){
         if(cars==null)
             cars = new LinkedList<Car_Interface>();
-        this.cars.add(car);
+        this.cars.addLast(car);
     }
 
     @Override
@@ -149,7 +161,7 @@ public class User implements User_Interface{
     public void addTransaction(Transaction_Interface transaction){
         if(this.transactions==null)
             this.transactions=new LinkedList<Transaction_Interface>();
-        this.transactions.add(transaction);
+        this.transactions.addLast(transaction);
         transaction.setUser(this);
     }
     public void removeTransaction(Transaction_Interface transaction){

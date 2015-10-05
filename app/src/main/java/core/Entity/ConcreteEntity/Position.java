@@ -1,4 +1,4 @@
-package core.Entity;
+package core.Entity.ConcreteEntity;
 
 import core.Entity.Interface.Position_Interface;
 

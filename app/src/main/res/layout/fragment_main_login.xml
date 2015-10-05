@@ -6,7 +6,7 @@
     android:layout_height="match_parent" tools:context="com.tesseract.tesseract.Login.MainLoginFragment">
 
     <Button
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:text="Sign in with facebook"
         android:layout_height="35dp"
         android:id="@+id/facebook_login_button"
@@ -16,7 +16,7 @@
         android:layout_marginBottom="5dp"/>
 
     <Button
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="35dp"
         android:text="Sign in with google+"
         android:id="@+id/google_login_button"
@@ -28,28 +28,28 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout"
         android:layout_gravity="center_horizontal">
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="45dp"
             android:text="Register"
             android:textColor="@color/button_material_light"
-            android:background="@color/background_floating_material_dark"
+            android:background="@drawable/button_background"
             android:id="@+id/tesseract_register_button"
             android:layout_marginRight="2dp"
             android:layout_weight="0.5"/>
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="35dp"
+            android:layout_height="45dp"
             android:text="Login"
             android:layout_marginLeft="2dp"
             android:textColor="@color/button_material_light"
-            android:background="@color/background_floating_material_dark"
+            android:background="@drawable/button_background"
             android:id="@+id/tesseract_login_button"
             android:layout_weight="0.5"/>
     </LinearLayout>

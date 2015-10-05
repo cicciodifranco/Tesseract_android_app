@@ -16,7 +16,8 @@ import java.util.Observer;
 /**
  * Created by francesco on 06/06/15.
  */
-public class TesseractPositionManager extends Observable{
+public class TesseractPositionManager{
+
     private Context mContext;
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -25,74 +26,44 @@ public class TesseractPositionManager extends Observable{
     private String locationProvider;
 
 
-    public TesseractPositionManager (Context mContext) {
+
+    public TesseractPositionManager (Context mContext, LocationListener locationListener ) {
 
         this.mContext = mContext;
+        this.locationListener=locationListener;
         locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         locationProvider = LocationManager.GPS_PROVIDER;
-        locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
+    }
 
-                current_position=location;
-                setChanged();
-                notifyObservers(location);
-                Log.i("position manager:", "position changed");
-            }
+    public void stop(){
+        locationManager.removeUpdates(locationListener);
+    }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-                    current_status=status;
-
-            }
-
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-
-
+    public void start(){
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-        current_position = locationManager.getLastKnownLocation(locationProvider);
-
-        if(current_position!=null){
-            current_position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        }
-        if(current_position!=null)
-            Log.i("Location Manager: ", "Current position " + current_position.toString());
-        else
-            Log.i("Location Manager: ", "Current position null");
     }
 
-    public Location getLastLocation(){
-        return this.current_position;
-
-    }
-    public LatLng getLatLong(){
-        return new LatLng(current_position.getLatitude(),current_position.getLongitude());
-    }
-    public boolean isAvaible(){
-        return (current_position != null);
+    public void setLatency(long millisec){
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, millisec, 0, locationListener);
     }
 
-    public int isActive(){
-        return current_status;
+    public Location getLastKnowLocation(){
+        Location location;
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(location!=null)
+            return location;
+
+        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if(location!=null)
+            return location;
+
+        location= locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        if(location!=null)
+            return location;
+
+        return null;
     }
 
 
-    @Override
-    public void addObserver(Observer observer) {
-        super.addObserver(observer);
-    }
 
-    @Override
-    public void deleteObserver(Observer observer){super.deleteObserver(observer);}
-
-    @Override
-    public void notifyObservers(Object data) {
-        super.notifyObservers(data);
-    }
 }
