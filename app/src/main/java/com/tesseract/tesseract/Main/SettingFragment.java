@@ -6,23 +6,21 @@ import android.app.Fragment;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.tesseract.tesseract.R;
 
+import core.Entity.ConcreteEntity.Car;
 import core.Entity.ConcreteEntity.User;
+import core.PreferenceEditor;
 import core.UserCreator;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SettingFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SettingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class SettingFragment extends PreferenceFragment{
+    private static String TAG = "settings fragment";
+
     private static UserCreator userCreator;
     private User mUser;
     public boolean changed=false;
@@ -37,14 +35,57 @@ public class SettingFragment extends PreferenceFragment{
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.pref_general);
-        findPreference("example_text").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+        Preference name = findPreference("name");
+        name.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 CharSequence text = ((EditTextPreference) preference).getText();
-                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+                if (text != null) {
+                    User user = UserCreator.userFactory();
+
+                    user.setName(text.toString());
+                    UserCreator.storeUser();
+                }
+                else Log.i(TAG, "text name null");
+
+
                 return true;
             }
         });
+        name.setDefaultValue(UserCreator.userFactory().getName());
+
+
+        Preference surname = findPreference("surname");
+
+        surname.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                CharSequence text = ((EditTextPreference) preference).getText();
+                User user= UserCreator.userFactory();
+                if(text != null) {
+                    user.setSurname(text.toString());
+                    UserCreator.storeUser();
+                }
+                else Log.i(TAG, "text surname null, obj: "+newValue.toString());
+                return true;
+            }
+        });
+        surname.setDefaultValue(UserCreator.userFactory().getSurname());
+
+        Preference car = findPreference("car");
+        car.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                CharSequence text = ((EditTextPreference) preference).getText();
+                if(text!=null)
+                    UserCreator.carFactory(text.toString());
+                return true;
+            }
+        });
+        Car carEntity =(Car) UserCreator.userFactory().getSelectedCar();
+        if(carEntity!=null)
+            car.setDefaultValue(carEntity.getRegistration_number());
 
 
 

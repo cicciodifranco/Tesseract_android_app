@@ -28,8 +28,8 @@ public class Splash_Screen extends ActionBarActivity implements MainLoginFragmen
     private static final int LOGIN = 1;
     private static final int REGISTER = 2;
 
-    private PreferenceEditor preferenceEditor = PreferenceEditor.getInstance();
-    private PubNub pubnub = new PubNub("francescodifranco90@gmail.com");
+
+
 
     private static MainLoginFragment mainLoginFragment;
     private static Login_Fragment loginFragment;
@@ -148,6 +148,7 @@ public class Splash_Screen extends ActionBarActivity implements MainLoginFragmen
             }
             Intent mainActivity = new Intent(this, MainActivity.class);
             startActivity(mainActivity);
+            PreferenceEditor.getInstance().setLogged(true);
             finish();
         }
     }

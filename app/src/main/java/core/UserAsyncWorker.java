@@ -1,12 +1,14 @@
 package core;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
+import java.util.StringTokenizer;
 
 import core.CommunicationManager.HTTP.UserCommunicationManager;
 import core.Entity.ConcreteEntity.Car;
@@ -20,6 +22,7 @@ import core.Entity.Interface.Car_Interface;
  * Created by kakashi on 9/25/15.
  */
 public class UserAsyncWorker extends AsyncTask <Integer, Integer, Integer> {
+    private final String TAG = "Async task";
 
     public static final int STORE_USER = 0;
     public static final int GET_USER = 1;
@@ -32,6 +35,7 @@ public class UserAsyncWorker extends AsyncTask <Integer, Integer, Integer> {
     public static final int GET_TRANSACTIONS = 8;
     public static final int GET_ALL_INFO = 9;
     public static final int REGISTER = 10;
+    public static final int LOGIN = 11;
     private Object data;
     private PreferenceEditor editor = PreferenceEditor.getInstance();
     private UserCommunicationManager userCommunicationManager = UserCommunicationManager.getInstance();
@@ -50,6 +54,7 @@ public class UserAsyncWorker extends AsyncTask <Integer, Integer, Integer> {
     @Override
     protected Integer doInBackground(Integer... action) {
         this.action=action[0];
+        Log.i(TAG, "async task started");
         switch (action[0]) {
 
             case STORE_USER: {
@@ -140,6 +145,11 @@ public class UserAsyncWorker extends AsyncTask <Integer, Integer, Integer> {
                 break;
             }
 
+            case LOGIN : {
+                if(data instanceof String)
+                    if(login())
+                        return 0;
+            }
             default:
                 break;
 
@@ -155,6 +165,16 @@ public class UserAsyncWorker extends AsyncTask <Integer, Integer, Integer> {
             listener.OnActionsFinished(action, false);
     }
 
+    private synchronized boolean login(){
+        StringTokenizer stringTokenizer = new StringTokenizer((String)data, ";");
+        String user = stringTokenizer.nextToken();
+        String pass = stringTokenizer.nextToken();
+
+        if(user!=null && pass!=null)
+            return UserCommunicationManager.getInstance().login(user, pass);
+
+        return false;
+    }
     private synchronized boolean getUser(User mUser){
         String response = userCommunicationManager.getUserInfo();
         if(response!=null){
@@ -172,7 +192,7 @@ public class UserAsyncWorker extends AsyncTask <Integer, Integer, Integer> {
                 fiscal_code=jsonObject.getString("fiscal_code");
 
                 //setting attributes
-                mUser.setId(Integer.parseInt(id));
+                mUser.setId(id);
                 mUser.setEmail(email);
                 mUser.setName(name);
                 mUser.setSurname(surname);
@@ -300,7 +320,7 @@ public class UserAsyncWorker extends AsyncTask <Integer, Integer, Integer> {
 
     private synchronized  boolean getAllInfo(User mUser){
 
-        return false;
+        return getUser(mUser);
     }
 
     public boolean register(User user){

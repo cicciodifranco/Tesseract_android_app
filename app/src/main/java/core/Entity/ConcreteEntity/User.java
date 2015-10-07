@@ -12,15 +12,15 @@ import core.Entity.Interface.User_Interface;
  * Created by francesco on 06/06/15.
  */
 public class User implements User_Interface{
-    private int id;
-    private String email, name, surname, gender, birthday, fiscalCode;
+
+    private String id, email, name, surname, gender, birthday, fiscalCode;
     private Car selectedCar;
     private LinkedList<Car_Interface> cars;
     private LinkedList<Transaction_Interface> transactions;
     private LinkedList<Route_Interface> routes;
     private String password;
 
-    public User(int id, String email, String name, String surname, String birthday, String gender, String fiscalCode){
+    public User(String id, String email, String name, String surname, String birthday, String gender, String fiscalCode){
         this.id=id;
         this.email=email;
         this.name=name;
@@ -33,12 +33,12 @@ public class User implements User_Interface{
     }
 
     @Override
-    public void setId(int id){
+    public void setId(String id){
         this.id=id;
     }
 
     @Override
-    public int getId(){
+    public String getId(){
         return this.id;
     }
     @Override

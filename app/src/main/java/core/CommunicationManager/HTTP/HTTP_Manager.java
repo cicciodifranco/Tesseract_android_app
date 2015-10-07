@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import core.PreferenceEditor;
@@ -81,9 +82,20 @@ public class HTTP_Manager {
     private boolean fetchCookie() {
 
         try {
+            identityProvider = PreferenceEditor.getInstance().getIdentityProvider();
+            accessToken = PreferenceEditor.getInstance().getAccessToken();
             if(accessToken==null)
                 throw new Exception("NULL Access Token");
             //Building HTTP POST request
+            if(identityProvider.equals("facebook"))
+                loginUrl = FACEBOOK_LOGIN;
+            else {
+                if (identityProvider.equals("google"))
+                    loginUrl = GPLUS_LOGIN;
+                else
+                    loginUrl = TESSERACT_LOGIN;
+            }
+
             targetUrl = new URL(loginUrl);
             connection = (HttpURLConnection) targetUrl.openConnection();
             connection.setRequestMethod("POST");
@@ -104,7 +116,7 @@ public class HTTP_Manager {
             Log.i(TAG, "response code fetch cookie: " +responseCode);
 
             if (responseCode == 200) {
-                Log.i(TAG, connection.getHeaderField("set-cookie"));
+
                 CookieStore cookieStore = cookieManager.getCookieStore();
                 List<HttpCookie> cookieList = cookieStore.getCookies();
                 for (HttpCookie mCookie : cookieList) {
@@ -112,7 +124,7 @@ public class HTTP_Manager {
                     if (mCookie.getDomain().equals(DOMAIN)) {
                         cookie = mCookie;
                         Log.i(TAG, cookie.toString());
-                        connection.disconnect();
+                        //connection.disconnect();
                         //return true;
                     }
 
@@ -175,7 +187,7 @@ public class HTTP_Manager {
             else{
                 response="" + responseCode;
             }
-            Log.i(TAG, "response code: " +responseCode);
+            //Log.i(TAG, "response code: " +responseCode);
             connection.disconnect();
             return response;
 
@@ -191,7 +203,7 @@ public class HTTP_Manager {
     public String doGET(String URL, Map<String, String> parameters) {
 
 
-        Log.i(TAG, URL);
+
         try {
             if (cookie == null && !URL.equals(REGISTER) && !URL.equals(TESSERACT_LOGIN) && !URL.equals(GET_TOOLBOTHS)) {
                 if (!fetchCookie())
@@ -201,9 +213,9 @@ public class HTTP_Manager {
             int i =0;
             for (String key : parameters.keySet()) {
                 if(i==0)
-                    URL += "?" + key + "=" + parameters.get(key);
+                    URL += "?" + key + "=" + parameters.get(key).toString();
                 else
-                    URL += "&" + key + "=" + parameters.get(key);
+                    URL += "&" + key + "=" + parameters.get(key).toString();
                 i++;
             }
 
@@ -216,11 +228,12 @@ public class HTTP_Manager {
 
             //Log.i(TAG, cookie.toString());
             int responseCode = connection.getResponseCode();
-            Log.i(TAG, "Response code: " + responseCode);
+            Log.i(TAG, "Response code of GET [" +URL+ "] : ["+ responseCode+"]");
 
 
             String response = "";
             if (responseCode == 200) {
+                //Log.i(TAG, "Response code of GET [" +URL+ "] : ["+ String.format("%i", responseCode)+"]");
                 connection.getContent();
                 String inputLine;
                 BufferedReader in = new BufferedReader(
@@ -231,13 +244,14 @@ public class HTTP_Manager {
                 in.close();
             }
             else{
-                response+=""+401;
+                response="401";
             }
             connection.disconnect();
             return response;
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
-            return ""+401;
+
+                Log.e(TAG, "error in doGET: "+Log.getStackTraceString(e));
+            return "401";
         }
     }
 }

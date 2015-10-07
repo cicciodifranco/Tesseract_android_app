@@ -28,9 +28,10 @@ public class UserCreator extends Observable implements UserAsyncWorker.AsyncWork
     private static PreferenceEditor editor;
     private UserCommunicationManager userCommunicationManager;
     private User_Interface user;
-
-
     private static UserAsyncWorker userAsyncWorker;
+
+
+
     private String  TAG = "UserCreator";
 
     private CreatorListener creatorListener;
@@ -38,9 +39,15 @@ public class UserCreator extends Observable implements UserAsyncWorker.AsyncWork
     private UserCreator(){
         editor = PreferenceEditor.getInstance();
         //userCommunicationManager  = UserCommunicationManager.getInstance();
+        if(editor.isLogged()) {
+            userAsyncWorker = new UserAsyncWorker(mUser, this);
+            userAsyncWorker.execute(UserAsyncWorker.GET_ALL_INFO);
+        }
 
 
     }
+
+
     public void setCreatorListener(CreatorListener mCreatorListener){
         creatorListener = mCreatorListener;
     }
@@ -59,12 +66,14 @@ public class UserCreator extends Observable implements UserAsyncWorker.AsyncWork
                 mUser = new User(editor.getId(),editor.getEmail(), editor.getName(),
                                 editor.getSurname(), editor.getBirthday(),
                                 editor.getGender(), editor.getFiscalCode());
+                if(PreferenceEditor.getInstance().getSelectedCar()!=null)
+                    mUser.setSelectedCar(new Car(PreferenceEditor.getInstance().getSelectedCar()));
             }
         }
         return mUser;
 
     }
-    public static User userFactory(int id, String email, String name, String surname, String birthday, String gender, String fiscalCode){
+    public static User userFactory(String id, String email, String name, String surname, String birthday, String gender, String fiscalCode){
 
         mUser= new User(id, email, name, surname, birthday, gender, fiscalCode);
         userAsyncWorker = new UserAsyncWorker(mUser, instance);
@@ -72,13 +81,18 @@ public class UserCreator extends Observable implements UserAsyncWorker.AsyncWork
 
         return mUser;
     }
+    public static void storeUser(){
+        userAsyncWorker = new UserAsyncWorker(mUser, instance);
+        userAsyncWorker.execute(UserAsyncWorker.STORE_USER);
+    }
 
     public void login(String username, String password){
-
+        userAsyncWorker = new UserAsyncWorker(username+";"+password, this);
+        userAsyncWorker.execute(UserAsyncWorker.LOGIN);
     }
 
     public static void register(String email, String name, String surname, String birthday, String gender, String fiscalCode, String password){
-        mUser= new User(0, email, name, surname, birthday, gender, fiscalCode);
+        mUser= new User("", email, name, surname, birthday, gender, fiscalCode);
         mUser.setPassword(password);
         userAsyncWorker = new UserAsyncWorker(mUser, instance);
         userAsyncWorker.execute(UserAsyncWorker.REGISTER);
@@ -88,6 +102,9 @@ public class UserCreator extends Observable implements UserAsyncWorker.AsyncWork
         Car car;
         if (editor.isLogged()) {
             car = new Car(registration_number);
+            mUser.addCar(car);
+            mUser.setSelectedCar(car);
+            PreferenceEditor.getInstance().setSelectedCar(registration_number);
             userAsyncWorker = new UserAsyncWorker(car, instance);
             userAsyncWorker.execute(UserAsyncWorker.STORE_CAR);
             return car;
@@ -103,6 +120,7 @@ public class UserCreator extends Observable implements UserAsyncWorker.AsyncWork
             Route route = new Route(0, toolboth, car);
             mUser.addRoute(route);
 
+
             userAsyncWorker = new UserAsyncWorker(route, this);
             userAsyncWorker.execute(UserAsyncWorker.START_ROUTE);
 
@@ -111,7 +129,12 @@ public class UserCreator extends Observable implements UserAsyncWorker.AsyncWork
     }
     public void endRoute(Toolboth endToolboth){
         if(mUser!=null){
-            userAsyncWorker = new UserAsyncWorker(mUser.getRoutes().getLast(), this);
+            mUser.getRoutes().getLast().setFinalToolboth(endToolboth);
+            if(endToolboth.getId()==mUser.getRoutes().getLast().getStartingToolboth().getId()) {
+                Log.i(TAG, "start toolboth is equal than final tollboth ");
+                return;
+            }
+            UserAsyncWorker userAsyncWorker = new UserAsyncWorker(mUser.getRoutes().getLast(), this);
             userAsyncWorker.execute(UserAsyncWorker.END_ROUTE);
         }
     }

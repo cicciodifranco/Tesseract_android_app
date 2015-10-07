@@ -1,5 +1,7 @@
 package com.tesseract.tesseract.Main;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -13,6 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback {
 
+    private static final String TAG = "Map fragment";
     private GoogleMap mMap;
     private Mediator mediator = Mediator.getInstance();
 
@@ -33,6 +36,7 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
     @Override
     public void onMapReady(GoogleMap googleMap){
+        mMap=googleMap;
         mediator.onMapReady();
     }
 
@@ -42,19 +46,17 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     }
 
 
-    public Marker setMarker(LatLng location, int resource){
+    public Marker setMarker(LatLng location, int resource, String title){
         Marker marker=null;
 
         if(mMap!=null){
-            if(resource!=0)
-                marker = mMap.addMarker(new MarkerOptions()
+            marker = mMap.addMarker(new MarkerOptions()
                     .position(location)
                     .draggable(false)
+                    .title(title)
+                    .draggable(false)
                     .icon(BitmapDescriptorFactory.fromResource(resource)));
-            else
-                marker = mMap.addMarker(new MarkerOptions()
-                        .position(location)
-                        .draggable(false));
+
         }
         return marker;
     }

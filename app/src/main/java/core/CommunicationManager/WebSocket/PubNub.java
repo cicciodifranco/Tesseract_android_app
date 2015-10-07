@@ -16,7 +16,7 @@ public class PubNub extends Observable {
 
     public PubNub(String channel){
         try {
-            pubnub.subscribe("francescodifranco90@gmail.com", new Callback() {
+            pubnub.subscribe(channel, new Callback() {
 
                         @Override
                         public void connectCallback(String channel, Object message) {

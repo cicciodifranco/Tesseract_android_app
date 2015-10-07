@@ -9,8 +9,8 @@ import core.Entity.ConcreteEntity.Car;
  */
 public interface User_Interface {
 
-    public void setId(int id);
-    public int getId();
+    public void setId(String id);
+    public String getId();
     public void setEmail(String email);
     public String getEmail();
 

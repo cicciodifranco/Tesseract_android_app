@@ -20,7 +20,7 @@ public class UserCommunicationManager {
 
     private UserCommunicationManager(){
         httpManager= HTTP_Manager.getInstance();
-        httpManager.init(PreferenceEditor.getInstance().getAccessToken(), "facebook");
+        //httpManager.init(PreferenceEditor.getInstance().getAccessToken(), PreferenceEditor.getInstance().getIdentityProvider());
         editor= PreferenceEditor.getInstance();
 
     }
@@ -32,7 +32,7 @@ public class UserCommunicationManager {
     public String getUserInfo(){
 
         HashMap parameters = new HashMap<String, String>();
-        parameters.put("id", editor.getId());
+        parameters.put("id", ""+editor.getId());
         String response = httpManager.doGET(HTTP_Manager.GET_USER_INFO, parameters);
         if(response.equals("401"))
             return null;
@@ -67,6 +67,16 @@ public class UserCommunicationManager {
          else return true;
 
 
+     }
+     public boolean login(String user, String pass){
+         HashMap<String, String> parameters = new HashMap<>();
+         parameters.put("email", user);
+         parameters.put("pass", pass);
+         String response = httpManager.doGET(HTTP_Manager.TESSERACT_LOGIN, parameters);
+         if(response.equals("401"))
+             return false;
+         else
+             return false;
      }
 
      public boolean storeCar(Car car){
@@ -104,7 +114,7 @@ public class UserCommunicationManager {
 
     public String startRoute(Route route){
         HashMap parameters = new HashMap<String, String>();
-        parameters.put("start_toolboth", route.getStartingToolboth().getId());
+        parameters.put("start_toolboth", ""+route.getStartingToolboth().getId());
         parameters.put("registration_number", route.getCar().getRegistration_number());
 
         String response = httpManager.doGET(HTTP_Manager.START_ROUTE, parameters);
@@ -115,8 +125,8 @@ public class UserCommunicationManager {
     }
     public String endRoute(Route route){
         HashMap parameters = new HashMap<String, String>();
-        parameters.put("end_toolboth", route.getFinalToolboth().getId());
-        parameters.put("id_route", route.getId());
+        parameters.put("end_toolboth", ""+route.getFinalToolboth().getId());
+        parameters.put("id_route", ""+route.getId());
         String response = httpManager.doGET(HTTP_Manager.END_ROUTE, parameters);
         if(response.equals("401"))
             return null;

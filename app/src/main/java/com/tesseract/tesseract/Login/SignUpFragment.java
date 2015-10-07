@@ -106,7 +106,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener, Us
         if(email2.equals(email)){
             UserCreator.getInstance().setCreatorListener(this);
             UserCreator.register(email, name, surname, "", "", "", password);
-
+            ((Splash_Screen)getActivity()).loginInProgress();
 
         }
         else

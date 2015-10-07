@@ -31,10 +31,13 @@ public class TesseractCreator  implements TesseractAsyncWorker.TesseractListener
     public static TesseractCreator getInstance(){
         if(instance==null) {
             instance = new TesseractCreator();
-            tesseractAsyncWorker = new TesseractAsyncWorker(instance);
-            tesseractAsyncWorker.execute();
+
         }
         return instance;
+    }
+    public static void fetchToolboth(){
+        tesseractAsyncWorker = new TesseractAsyncWorker(instance);
+        tesseractAsyncWorker.execute();
     }
     public void setTesseractCreatorListener(TesseractCreatorListener listener){
         this.tesseractCreatorListener = listener;
@@ -50,6 +53,8 @@ public class TesseractCreator  implements TesseractAsyncWorker.TesseractListener
     }
 
     public Map<String, Toolboth> getToolbothMap(){
+        if(toolbothMap == null)
+            fetchToolboth();
         return toolbothMap;
     }
 
@@ -57,28 +62,30 @@ public class TesseractCreator  implements TesseractAsyncWorker.TesseractListener
 
 
     @Override
-    public void OnActionFinished(String response) {
-        try {
-            toolbothMap= new HashMap<>();
-            JSONArray jsonArray = new JSONArray(response);
-            for(int i=0; i<jsonArray.length(); i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                int id=jsonObject.getInt("toolboth_id");
-                String name=jsonObject.getString("name"),
-                        city = jsonObject.getString("city");
-                Double latitude = jsonObject.getDouble("latitude")
-                        , longitude = jsonObject.getDouble("longitude");
-                Toolboth t = new Toolboth(id, name, city, latitude, longitude);
-                toolbothMap.put(name, t);
-                toolboth[t.getId()]=t;
+    public synchronized void OnActionFinished(String response) {
+        if(response!=null)
+            try {
+                toolbothMap= new HashMap<>();
 
+                JSONArray jsonArray = new JSONArray(response);
+                for(int i=0; i<jsonArray.length(); i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    int id=jsonObject.getInt("toolboth_id");
+                    String name=jsonObject.getString("name"),
+                            city = jsonObject.getString("city");
+                    Double latitude = jsonObject.getDouble("latitude")
+                            , longitude = jsonObject.getDouble("longitude");
+                    Toolboth t = new Toolboth(id, name, city, latitude, longitude);
+                    toolbothMap.put(name, t);
+                    toolboth[t.getId()]=t;
+
+                }
+                if(tesseractCreatorListener!=null)
+                    tesseractCreatorListener.OnActionFinished();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            if(tesseractCreatorListener!=null)
-                tesseractCreatorListener.OnActionFinished();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
 

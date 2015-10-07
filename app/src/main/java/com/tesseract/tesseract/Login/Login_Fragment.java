@@ -98,6 +98,7 @@ public class Login_Fragment extends Fragment implements View.OnClickListener, Us
                 UserCreator.getInstance().setCreatorListener(this);
                 UserCreator.getInstance().login(email, pass);
                 login_running=true;
+                ((Splash_Screen)getActivity()).loginInProgress();
             }
         }
         else Toast.makeText(getActivity().getApplicationContext(), "Login in progress ...", Toast.LENGTH_LONG).show();
@@ -110,11 +111,12 @@ public class Login_Fragment extends Fragment implements View.OnClickListener, Us
 
         if(action == UserAsyncWorker.GET_ALL_INFO && result){
             ((Splash_Screen)getActivity()).loginCompleted(true, Splash_Screen.TESSERACT);
-            PreferenceEditor.getInstance().setLogged(true);
+
         }
         else{
             Toast.makeText(getContext(), "Login error", Toast.LENGTH_SHORT).show();
             login_running=false;
+            ((Splash_Screen)getActivity()).loginCompleted(false, Splash_Screen.TESSERACT);
         }
     }
 

@@ -10,7 +10,7 @@ import core.CommunicationManager.HTTP.MapsCommunicationManager;
  */
 public class TesseractAsyncWorker extends AsyncTask<Integer, Integer, String> {
     private TesseractListener listener;
-    private MapsCommunicationManager mapsCommunicationManager;
+    private MapsCommunicationManager mapsCommunicationManager = MapsCommunicationManager.getInstance();
     private int action;
     public TesseractAsyncWorker (TesseractListener tesseractListener){
         this.listener = tesseractListener;
@@ -27,6 +27,8 @@ public class TesseractAsyncWorker extends AsyncTask<Integer, Integer, String> {
 
 
     private String getToolboths(){
+        if(mapsCommunicationManager==null)
+            mapsCommunicationManager = MapsCommunicationManager.getInstance();
         return mapsCommunicationManager.getToolboths();
 
     }

@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
+import javax.sql.StatementEventListener;
+
 /**
  * Created by kakashi on 04/07/15.
  */
@@ -30,6 +32,8 @@ class Preferences{
     public static final String ROUTES = "routes";
     public static final String TRANSACTIONS = "transactions";
     public static final String ROUTE_INCOMPLETE = "route_incomplete";
+    public static final String SELECTED_CAR = "selected_car";
+    public static final String NOTIFICATION_COUNT = "notification_count";
 }
 
 public class PreferenceEditor extends Observable {
@@ -72,15 +76,15 @@ public class PreferenceEditor extends Observable {
         return mSharedPreferences.getBoolean(Preferences.LOGGED, false);
     }
 
-    public void storeId(int id){
+    public void storeId(String id){
 
         editor=mSharedPreferences.edit();
-        editor.putInt(Preferences.USER_ID, id);
+        editor.putString(Preferences.USER_ID, id);
         editor.commit();
     }
 
-    public int getId(){
-        return mSharedPreferences.getInt(Preferences.USER_ID, 0);
+    public String getId(){
+        return mSharedPreferences.getString(Preferences.USER_ID, null);
 
     }
     public void setIdentityProvider(String identityProvider){
@@ -201,6 +205,8 @@ public class PreferenceEditor extends Observable {
     public String getRoutes(){
         return mSharedPreferences.getString(Preferences.ROUTES, null);
     }
+
+
     public void setTransactions(String transactions){
         editor=mSharedPreferences.edit();
         editor.putString(Preferences.TRANSACTIONS, transactions);
@@ -219,6 +225,25 @@ public class PreferenceEditor extends Observable {
         editor = mSharedPreferences.edit();
         editor.putBoolean(Preferences.ROUTE_INCOMPLETE, state);
         editor.commit();
+    }
+
+    public String getSelectedCar(){
+        return mSharedPreferences.getString(Preferences.SELECTED_CAR, null);
+    }
+
+    public void setSelectedCar(String selectedCar){
+        editor= mSharedPreferences.edit();
+        editor.putString(Preferences.SELECTED_CAR, selectedCar);
+        editor.commit();
+    }
+
+    public int getNotificationCount(){
+        int count = mSharedPreferences.getInt(Preferences.NOTIFICATION_COUNT, 0);
+        count++;
+        editor=mSharedPreferences.edit();
+        editor.putInt(Preferences.NOTIFICATION_COUNT, count);
+        editor.commit();
+        return count;
     }
 }
 

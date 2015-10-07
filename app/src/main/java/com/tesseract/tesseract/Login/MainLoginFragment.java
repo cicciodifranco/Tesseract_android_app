@@ -241,7 +241,8 @@ gender":"male"
     public void fetchFbInfo(final AccessToken accessToken){
         UserCreator creator = UserCreator.getInstance();
         String fbAccessToken=""+accessToken.getToken();
-        creator.storeAccessToken(fbAccessToken);
+        PreferenceEditor.getInstance().setAccessToken(fbAccessToken);
+        PreferenceEditor.getInstance().setIdentityProvider(Splash_Screen.FACEBOOK);
         creator.setCreatorListener(this);
         Log.i(TAG, fbAccessToken);
         GraphRequest request = GraphRequest.newMeRequest(accessToken,new GraphRequest.GraphJSONObjectCallback() {
@@ -251,15 +252,18 @@ gender":"male"
                             if(object!=null) {
                                 try {
 
-                                    int id= object.getInt("id");
-                                    String name = object.getString("first_name"),
+
+
+                                    Log.i(TAG, object.toString());
+                                    String id= object.getString("id"),
+                                            name = object.getString("first_name"),
                                            surname = object.getString("last_name"),
                                            gender= object.getString("gender"),
                                            birthday= object.getString("birthday"),
                                            locale= object.getString("locale");
                                     UserCreator.userFactory(id, "null", name, surname, birthday, gender, "null");
 
-
+                                    Log.i(TAG, "User id = " + id);
 
                                     return;
                                     } catch (Exception e) {
@@ -281,7 +285,7 @@ gender":"male"
         if(result) {
 
             ((Splash_Screen) getActivity()).loginCompleted(true, Splash_Screen.FACEBOOK);
-            PreferenceEditor.getInstance().setLogged(true);
+
         }
     }
 
